@@ -21,7 +21,7 @@ var config = {
   // community prefix of the firmware images
   community_prefix: 'gluon-ffmr-',
   // firmware version regex
-  version_regex: '-([0-9]+-(stable|experimental))[.-]';
+  version_regex: '-([0-9]+-(stable|experimental))[.-]',
   // relative image paths and branch
   directories: {
     '/stable/factory/': 'stable',
