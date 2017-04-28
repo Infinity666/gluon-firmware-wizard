@@ -15,21 +15,23 @@
 
 var config = {
   // list images on console that match no model
-  listMissingImages: false,
+  listMissingImages: true,
   // see devices.js for different vendor model maps
   vendormodels: vendormodels,
   // community prefix of the firmware images
-  community_prefix: 'gluon-ffda-',
+  community_prefix: 'gluon-ffmr-',
   // firmware version regex
-  version_regex: '-([0-9]+.[0-9]+.[0-9]+([+-~][0-9]+)?)[.-]',
+  version_regex: '-([0-9]+-(stable|experimental))[.-]';
   // relative image paths and branch
   directories: {
-    // some demo sources
-    './images/gluon-factory-example.html': 'stable',
-    './images/gluon-sysupgrade-example.html': 'stable'
+    '/stable/factory/': 'stable',
+    '/stable/sysupgrade/': 'stable',
+    '/experimental/factory/': 'experimental',
+    '/experimental/sysupgrade/': 'experimental'
   },
   // path to preview pictures directory
   preview_pictures: 'pictures/',
   // link to changelog
-  changelog: 'CHANGELOG.html'
+  // I CAN HAS CHANGELOG?
+  changelog: 'https://firmware.marburg.freifunk.net/'
 };
