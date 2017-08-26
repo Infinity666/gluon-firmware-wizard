@@ -34,6 +34,7 @@ var vendormodels = {
 
   "GL Innovations": {
     "AR150": "gl-ar150",
+    "AR300M": "gl-ar300m",
     "iNet 6408a": "gl-inet-6408a",
     "iNet 6416a": "gl-inet-6416a"
   },
@@ -91,7 +92,8 @@ var vendormodels = {
 
   "Raspberry Pi Foundation": {
     "PI": "raspberry-pi",
-    "PI 2": "raspberry-pi-2"
+    "PI 2": "raspberry-pi-2",
+    "PI 3": "raspberry-pi-3"
   },
 
   "TP-Link": {
@@ -142,6 +144,7 @@ var vendormodels = {
     "AirGateway": {"ubnt-air-gateway": "", "ubiquiti-airgateway": "",
                    "ubiquiti-airgateway-lr": "LR", "ubiquiti-airgateway-pro": "Pro"},
     "AirRouter": {"ubnt-air-router": "", "ubiquiti-airrouter": ""},
+    "AirRouter X": "ubnt-erx",
     "Bullet": {"ubiquiti-bullet-m2": "M2", "ubiquiti-bullet-m5": "M5", "bullet-m": "--ignore--"},
     "Litestation SR71": "ubiquiti-ls-sr71",
     "NanoStation Loco": {"ubiquiti-loco-m-xw": "--ignore--",
@@ -158,6 +161,7 @@ var vendormodels = {
     "Rocket Titanium": {"ubiquiti-rocket-m-ti": "--ignore--",
                         "ubiquiti-rocket-m2-ti": "M2",
                         "ubiquiti-rocket-m5-ti": "M5"},
+    "UniFi AC Mesh": "ubiquiti-unifi-ac-mesh",
     "UniFi AP": {"ubiquiti-unifi": "--ignore--", "ubiquiti-unifi-ap": ""},
     "UniFi AP LR": "ubiquiti-unifi-ap-lr",
     "UniFi AP Pro": "ubiquiti-unifi-ap-pro",
@@ -165,6 +169,10 @@ var vendormodels = {
     "UniFi AP AC Lite": "ubiquiti-unifi-ac-lite",
     "UniFi AP Outdoor": {"ubiquiti-unifi-outdoor": "", "ubiquiti-unifiap-outdoor": ""},
     "UniFi AP Outdoor+": {"ubiquiti-unifi-outdoor-plus": "", "ubiquiti-unifiap-outdoor\\\+": "", "ubiquiti-unifiap-outdoor%2B": "", "ubiquiti-unifiap-outdoor%2b": ""}
+  },
+
+  "Unbranded": {
+    "A5-V11": "a5-v11"
   },
 
   "VoCore": {
