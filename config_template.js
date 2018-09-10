@@ -19,7 +19,8 @@ var config = {
   // see devices.js for different vendor model maps
   vendormodels: vendormodels,
   // set enabled categories of devices (see devices.js)
-  enabled_device_categories: ["recommended"],
+  // Show all vendormodels, not only the recommended ones
+  enabled_device_categories: Object.keys(vendormodels),
   // community prefix of the firmware images
   community_prefix: 'gluon-ffmr-',
   // firmware version regex
