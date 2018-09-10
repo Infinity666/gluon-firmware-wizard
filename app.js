@@ -12,78 +12,79 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-function $(s) {
-  return document.querySelector(s);
-}
-
-function toggleClass(e, cssClass) {
-  setClass(e, cssClass, !hasClass(e, cssClass));
-}
-
-function hasClass(e, cssClass) {
-  var searchstring = (' ' + e.className + ' ').replace(/[\n\t]/g, " ");
-  return (searchstring.indexOf(' ' + cssClass+ ' ') !== -1);
-}
-
-function setClass(e, cssClass, active) {
-  if (active && !hasClass(e, cssClass)) {
-    e.className = (e.className+' '+cssClass).trim();
-  } else if (!active && hasClass(e, cssClass)) {
-    e.className = e.className.replace(cssClass, '');
-  }
-}
-
-function show_inline(s) {
-  $(s).style.display = 'inline-block';
-}
-
-function show_block(s) {
-  $(s).style.display = 'block';
-}
-
-function hide(s) {
-  $(s).style.display = 'none';
-}
-
-// Object.values() replacement
-function ObjectValues(obj) {
-  return Object.keys(obj).map(function(key) { return obj[key]; });
-}
-
-function isEmptyObject(obj) {
-    for (var name in obj) {
-        return false;
-    }
-    return true;
-}
-
-function scrollDown() {
-  try {
-    window.scrollBy({
-      top: 512,
-      left: 0,
-      behavior: 'smooth'
-    });
-  } catch (e) {
-    var start = document.body.scrollTop;
-    var lastTop = start - 1;
-    var interval = window.setInterval(function() {
-      if (document.body.scrollTop > start + 512 || lastTop - document.body.scrollTop === 0) {
-        window.clearInterval(interval);
-        console.log('stop');
-      }
-      lastTop = document.body.scrollTop;
-      document.body.scrollTop += 4;
-    }, 1);
-  }
-}
-
 var firmwarewizard = function() {
   var app = {};
 
+  // helper functions
+  function $(s) {
+    return document.querySelector(s);
+  }
+
+  function toggleClass(e, cssClass) {
+    setClass(e, cssClass, !hasClass(e, cssClass));
+  }
+
+  function hasClass(e, cssClass) {
+    var searchstring = (' ' + e.className + ' ').replace(/[\n\t]/g, " ");
+    return (searchstring.indexOf(' ' + cssClass+ ' ') !== -1);
+  }
+
+  function setClass(e, cssClass, active) {
+    if (active && !hasClass(e, cssClass)) {
+      e.className = (e.className+' '+cssClass).trim();
+    } else if (!active && hasClass(e, cssClass)) {
+      e.className = e.className.replace(cssClass, '');
+    }
+  }
+
+  function show_inline(s) {
+    $(s).style.display = 'inline-block';
+  }
+
+  function show_block(s) {
+    $(s).style.display = 'block';
+  }
+
+  function hide(s) {
+    $(s).style.display = 'none';
+  }
+
+  // Object.values() replacement
+  function ObjectValues(obj) {
+    return Object.keys(obj).map(function(key) { return obj[key]; });
+  }
+
+  function isEmptyObject(obj) {
+      for (var name in obj) {
+          return false;
+      }
+      return true;
+  }
+
+  function scrollDown() {
+    try {
+      window.scrollBy({
+        top: 512,
+        left: 0,
+        behavior: 'smooth'
+      });
+    } catch (e) {
+      var start = document.body.scrollTop;
+      var lastTop = start - 1;
+      var interval = window.setInterval(function() {
+        if (document.body.scrollTop > start + 512 || lastTop - document.body.scrollTop === 0) {
+          window.clearInterval(interval);
+          console.log('stop');
+        }
+        lastTop = document.body.scrollTop;
+        document.body.scrollTop += 4;
+      }, 1);
+    }
+  }
+
+  // constants
   var IGNORED_ELEMENTS = [
-    './', '../', 'experimental.manifest', 'beta.manifest', 'stable.manifest',
+    './', '../', '.manifest',
     '-tftp', '-fat', '-loader', '-NA', '-x2-', '-hsv2', '-p1020'
   ];
   var PANE = {'MODEL': 0, 'IMAGETYPE': 1, 'BRANCH': 2};
@@ -110,8 +111,13 @@ var firmwarewizard = function() {
     'factory': 'Erstinstallation',
     'sysupgrade': 'Upgrade',
     'rootfs': "Root-Image",
-    'kernel': "Kernel-Image"
+    'kernel': "Kernel-Image",
+    'bootloader': 'Bootloader-Image'
   };
+
+  var branches = ObjectValues(config.directories).filter(function(e, index, self) {
+    return index === self.indexOf(e);
+  });
 
   var reFileExtension = new RegExp(/.(bin|img.gz|img|tar)/);
   var reRemoveDashes = new RegExp(/-/g);
@@ -135,19 +141,24 @@ var firmwarewizard = function() {
     PREVIEW_PICTURES_DIR = config.preview_pictures;
   }
 
+  var enabled_device_categories = ['recommended'];
+  if ("enabled_device_categories" in config) {
+    enabled_device_categories = config.enabled_device_categories;
+  }
 
   function buildVendorModelsReverse() {
     var vendormodels_reverse = {};
 
-    // create a map of {match : [{vendor, model, default-revision}, ... ], ...}
-    for (var vendor in config.vendormodels) {
-      var models = config.vendormodels[vendor];
-      for (var model in models) {
-        var match = models[model];
-        if (typeof match == 'string') {
-          addArray(vendormodels_reverse, match, {'vendor': vendor, 'model': model, 'revision': ''});
-        } else for (var m in match) {
-          addArray(vendormodels_reverse, m, {'vendor': vendor, 'model': model, 'revision': match[m]});
+    for (var device_category in config.vendormodels) {
+      for (var vendor in config.vendormodels[device_category]) {
+        var models = config.vendormodels[device_category][vendor];
+        for (var model in models) {
+          var match = models[model];
+          if (typeof match == 'string') {
+            addArray(vendormodels_reverse, match, {'vendor': vendor, 'model': model, 'revision': '', category: device_category});
+          } else for (var m in match) {
+            addArray(vendormodels_reverse, m, {'vendor': vendor, 'model': model, 'revision': match[m], category: device_category});
+          }
         }
       }
     }
@@ -298,7 +309,7 @@ var firmwarewizard = function() {
   }
 
   function findType(name) {
-    var m = /-(sysupgrade|factory|rootfs|kernel)[-.]/.exec(name);
+    var m = /-(sysupgrade|factory|rootfs|kernel|bootloader)[-.]/.exec(name);
     return m ? m[1] : 'factory';
   }
 
@@ -352,6 +363,11 @@ var firmwarewizard = function() {
     var device = devices[0];
 
     if (device.model == '--ignore--' || device.revision == '--ignore--') {
+      return;
+    }
+
+    if (enabled_device_categories.indexOf(device.category) == -1) {
+      // the category is not in the list of enabled categories
       return;
     }
 
@@ -411,9 +427,12 @@ var firmwarewizard = function() {
     preview = preview.replace('openmesh-mr600', 'openmesh-mr600-v1');
     preview = preview.replace('openmesh-mr900', 'openmesh-mr900-v1');
     if (preview.indexOf('tp-link') != -1) preview += '-' + revision;
+    preview = preview.replace('tp-link-archer-c5-v1', 'tp-link-archer-c7-v2'); // Archer C5 v1 and Archer C7 v2 are identical
     preview = preview.replace('tp-link-tl-wa801n-nd-v3', 'tp-link-tl-wa801n-nd-v2'); // no preview picture for v3 yet
     preview = preview.replace('tp-link-tl-wr940n-v3', 'tp-link-tl-wr940n-v2'); // no preview picture for v3 yet
     preview = preview.replace('ubiquiti-unifi-ap', 'ubiquiti-unifi');
+    preview = preview.replace('ubiquiti-unifi-lr', 'ubiquiti-unifi');
+    preview = preview.replace('ubiquiti-unifi-pro', 'ubiquiti-unifi');
     preview = preview.replace('x86-virtualbox', 'x86-virtualbox.vdi');
     preview = preview.replace('x86-64-virtualbox', 'x86-virtualbox.vdi');
     preview = preview.replace('x86-vmware', 'x86-vmware.vmdk');
@@ -421,6 +440,8 @@ var firmwarewizard = function() {
     preview = preview.replace('x86-generic', 'x86-generic.img');
     preview = preview.replace('x86-64', 'x86-generic.img');
     preview = preview.replace('x86-kvm', 'x86-kvm.img');
+    preview = preview.replace('x86-generic.img.vdi', 'x86-virtualbox.vdi');
+    preview = preview.replace('x86-generic.img.vmdk', 'x86-vmware.vmdk');
 
     // collect branch versions
     app.currentVersions[branch] = version;
@@ -507,6 +528,12 @@ var firmwarewizard = function() {
         modelList.push([searchingstring, searchingstring, vendors[i], models[j], '']);
       }
     }
+
+    // Sort the reulting list alphabetically
+    modelList = modelList.sort(function(a, b) {
+      return a[0] > b[1] ? 1 : -1;
+    });
+
     return modelList;
   }
 
@@ -794,16 +821,16 @@ var firmwarewizard = function() {
         return;
       }
 
-      var revisions = images[currentVendor][currentModel]
-        .filter(function(e) {
-          return e.revision == currentRevision && e.type == currentImageType;
-        }).sort(function(a, b) {
-          if (a.branch == 'stable') return -1;
-          if (b.branch == 'stable') return 1;
-          if (a.branch == 'beta') return -1;
-          if (b.branch == 'beta') return 1;
-          return 0;
-        });
+      var revisions = images[currentVendor][currentModel].filter(function(e) {
+        return e.revision == currentRevision && e.type == currentImageType;
+      }).sort(function(a, b) {
+        // non-experimental branches should appear first
+        var a_experimental = config.experimental_branches.indexOf(a.branch) != -1;
+        var b_experimental = config.experimental_branches.indexOf(b.branch) != -1;
+        if (a_experimental && !b_experimental) return 1;
+        if (!a_experimental && b_experimental) return -1;
+        return branches.indexOf(a.branch) > branches.indexOf(b.branch);
+      });
 
       $('#branchselect').innerHTML = '';
       $('#branch-experimental-dl').innerHTML = '';
@@ -822,10 +849,10 @@ var firmwarewizard = function() {
                       (rev.size!==''?' ['+rev.size+']':'') +
                       ' (' +prettyPrintVersion(rev.version)+')';
 
-        if (rev.branch == 'experimental') {
-          if($('#branchselect .dl-expermental') === null) {
+        if (config.experimental_branches.indexOf(rev.branch) != -1) {
+          if($('#branchselect .dl-experimental') === null) {
             var button = document.createElement('button');
-            button.className = 'btn dl-expermental';
+            button.className = 'btn dl-experimental';
             button.addEventListener('click', toggleExperimentalWarning);
             button.innerText = 'Experimentelle Firmware anzeigen';
             $('#branchselect').appendChild(button);
@@ -867,9 +894,6 @@ var firmwarewizard = function() {
     updatePanes(s.vendor, s.model, s.revision, s.imageType);
 
     function updateCurrentVersions() {
-      var branches = ObjectValues(config.directories)
-        .filter(function(value, index, self) { return self.indexOf(value) === index; });
-
       $('#currentVersions').innerText = '';
       if (config.changelog !== undefined) {
         var a = document.createElement('a');
@@ -1030,20 +1054,14 @@ var firmwarewizard = function() {
       return 0;
     });
 
-    // prepare the matches for use in regex (join by pipe and escape dots)
-    var matchString = matches.join('|').replace(/\./g, '\.');
+    // prepare the matches for use in regex (join by pipe and escape regex special characters)
+    // according to https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+    var matchString = matches.map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
 
     // match image files. The match either ends with
     // - a dash or dot (if a file extension will follow)
     // - the end of the expression (if the file extension is part of the regex)
     var reMatch = new RegExp('('+matchString+')([.-]|$)');
-
-    // check if image regexes contain regular expressions themself
-    var reCheckRegex = new RegExp(/[^\\]+[+?*]/);
-
-    if (reCheckRegex.exec(matches.join('|')) !== null) {
-      console.log("Warning! Some regular expressions for firmware images, contain unescaped characters.");
-    }
 
     var sitesLoadedSuccessfully = 0;
     for (var indexPath in config.directories) {

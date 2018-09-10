@@ -18,6 +18,8 @@ var config = {
   listMissingImages: true,
   // see devices.js for different vendor model maps
   vendormodels: vendormodels,
+  // set enabled categories of devices (see devices.js)
+  enabled_device_categories: ["recommended"],
   // community prefix of the firmware images
   community_prefix: 'gluon-ffmr-',
   // firmware version regex
@@ -29,6 +31,8 @@ var config = {
     '/experimental/factory/': 'experimental',
     '/experimental/sysupgrade/': 'experimental'
   },
+  // experimental branches (show a warning for these branches)
+  experimental_branches: ['experimental'],
   // path to preview pictures directory
   preview_pictures: 'pictures/',
   // link to changelog
