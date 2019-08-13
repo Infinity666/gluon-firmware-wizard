@@ -18,8 +18,24 @@
       <img src="./router.png" >
       <div class="pane-wrapper">
         <div id="model-pane" class="pane">
+          <span class="notRecommendedLink">Veraltete Geräte anzeigen</span>
           <span class="firmwareTableLink">Tabelle anzeigen</span>
           <h1>Schritt 1: Wähle Dein Routermodell</h1>
+          <div class="warning-notrecommended">
+            <p>
+              <b>Vorsicht!</b> Nicht ohne Grund siehst Du in der Voreinstellung
+              nur die von uns empfohlenen Geräte, denn nur mit diesen ist ein reibungsloser
+              Freifunk-Betrieb gewährleistet.
+            </p>
+            <p>
+              Bevor du veraltete Geräte verwendest, solltest du dich selbst über die Konsequenzen
+              und technischen Hintergründe informieren und dich Entscheiden, ob Du wirklich alle
+              Nachteile in Kauf nehmen willst.
+            </p>
+            <div id="notrecommendedinfo"></div>
+            <input type="checkbox" id="notrecommendedselect" class="notRecommendedCheckbox" value="notRecommended" />
+            <label class="notRecommendedLabel" for="notrecommendedselect">Veraltete Geräte trotzdem anzeigen</label>
+          </div>
           <p>Erst mit der Freifunk-Firmware wird dein Router zu einem Teil des
              Freifunk-Netzes. Sie ist fertig vorkonfiguriert, um Kontakt mit
              benachbarten Freifunk-Knoten aufzunehmen, ein offenes und ohne
@@ -47,8 +63,8 @@
             <em>Upgrade</em> bezeichnete Version.
           </p>
           <p>
-            Einige Geräte benötigen spezielle Images, welche über den Bootloader 
-            des Herstellers eingespiel werden.
+            Einige Geräte benötigen spezielle Images, welche über den Bootloader
+            des Herstellers eingespielt werden.
           </p>
           <radiogroup id="typeselect" class="radiogroup"></radiogroup>
         </div>
@@ -57,16 +73,7 @@
         <div id="branch-pane" class="pane initiallyhidden">
           <h1>Schritt 3: Wähle Deinen Update-Kanal</h1>
           <p>Diese Freifunk-Firmware bieten wir in verschiedenen Versionen an:</p>
-          <ul>
-            <li>
-              <strong>Stable <sup>Empfehlung</sup></strong><br />
-              Gut getestet, zuverl&auml;ssig und stabil.<br />
-            </li>
-            <li>
-              <strong>Experimental</strong><br />
-              Vorabversionen neuer Stable-Kandidaten.<br />
-            </li>
-          </ul>
+          <ul id="branchdescs"></ul>
           <p>Die Auswahl der passenden Version entscheidet &uuml;ber die
              Stablit&auml;t des Routers und den potentiell anfallenden
              Wartungsaufwand.</p>
@@ -108,7 +115,7 @@
       </table>
     </div>
 
-    <p class="floatingBottomRight">Diese Webseite ist <a href="https://github.com/freifunk-darmstadt/gluon-firmware-wizard">freie Software</a>! Die Bilder der Router stammen von <a href="https://github.com/Moorviper/Freifunk-Router-Anleitungen">Daniel Krah</a> und sind lizenziert unter <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a>.</p>
+    <p class="floatingBottomRight">Diese Webseite ist <a href="https://github.com/freifunk-darmstadt/gluon-firmware-wizard">freie Software</a>! Die Bilder der Router stammen von <a href="https://github.com/Moorviper/Freifunk-Router-Anleitungen">Daniel Krah</a> und <a href="https://github.com/belzebub40k/router-pics">Julian Labus</a > und sind lizenziert unter <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY-NC-SA 4.0</a>.</p>
 
     <script src="devices.js"></script>
     <script src="config.js"></script>

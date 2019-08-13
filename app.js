@@ -104,7 +104,8 @@ var firmwarewizard = function() {
 
   var wizard = parseWizardObject();
   app.currentVersions = {};
-  var images = {};
+  var availableImages = {};
+  var images = availableImages;
   var vendormodels_reverse;
 
   var typeNames = {
@@ -119,7 +120,7 @@ var firmwarewizard = function() {
     return index === self.indexOf(e);
   });
 
-  var reFileExtension = new RegExp(/.(bin|img.gz|img|tar)/);
+  var reFileExtension = new RegExp(/.(bin|img.gz|img|tar|ubi)/);
   var reRemoveDashes = new RegExp(/-/g);
   var reSearchable = new RegExp('[-/ '+NON_BREAKING_SPACE+']', 'g');
   var reRemoveSpaces = new RegExp(/ /g);
@@ -144,6 +145,14 @@ var firmwarewizard = function() {
   var enabled_device_categories = ['recommended'];
   if ("enabled_device_categories" in config) {
     enabled_device_categories = config.enabled_device_categories;
+  }
+  if ("recommended_toggle" in config && config.recommended_toggle) {
+    enabled_device_categories = ['recommended'];
+    show_inline('.notRecommendedLink');
+
+    if (config.recommended_info_link) {
+      $('#notrecommendedinfo').innerHTML = '<p><a href="' + config.recommended_info_link + '" target="_new">Mehr Informationen</a>';
+    }
   }
 
   function buildVendorModelsReverse() {
@@ -188,6 +197,21 @@ var firmwarewizard = function() {
     return wizard;
   }
 
+  function setFilteredImages() {
+    images = {};
+    for (var vendor in availableImages) {
+      images[vendor] = {};
+      for (var model in availableImages[vendor]) {
+        for (var device in availableImages[vendor][model]) {
+          console.log(availableImages[vendor][model][device].category)
+          if (enabled_device_categories.indexOf(availableImages[vendor][model][device].category) > -1) {
+            addArray(images[vendor], model, availableImages[vendor][model][device]);
+          }
+        }
+      }
+    }
+  }
+
   window.onpopstate = function(event) {
     if (event.state === null) return;
     wizard = parseWizardObject(event.state);
@@ -196,6 +220,10 @@ var firmwarewizard = function() {
   };
 
   window.onload = function() {
+    if (config.title !== undefined) {
+      document.title = config.title;
+    }
+
     function parseURLasJSON() {
       var search = location.search.substring(1);
       return search ? JSON.parse(
@@ -227,12 +255,27 @@ var firmwarewizard = function() {
       scrollDown();
     });
 
+    $('#wizard .notRecommendedLink').addEventListener('click', function(e) {
+      toggleClass($('#model-pane'), 'show-notrecommended-warning');
+    });
+
     $('#wizard .firmwareTableLink').addEventListener('click', function(e) {
       firmwarewizard.showFirmwareTable();
     });
 
     $('#firmwareTable .firmwareTableLink').addEventListener('click', function(e) {
       firmwarewizard.hideFirmwareTable();
+    });
+
+    $('#notrecommendedselect').addEventListener('change', function(e) {
+      if (this.checked) {
+        enabled_device_categories = config.enabled_device_categories;
+      } else if ("enabled_device_categories" in config) {
+        enabled_device_categories = ['recommended'];
+      }
+      setFilteredImages();
+      updateHTML(wizard);
+      updateFirmwareTable();
     });
 
     vendormodels_reverse = buildVendorModelsReverse();
@@ -247,7 +290,7 @@ var firmwarewizard = function() {
         var model = fullModelList[m][MODEL_MODEL];
         previews.appendChild(createPicturePreview(vendor, model, searchstring));
       }
-
+      setFilteredImages();
       updateHTML(wizard);
       show_block('.manualSelection');
       updateFirmwareTable();
@@ -353,7 +396,7 @@ var firmwarewizard = function() {
   }
 
   function parseFilePath(match, basePath, filename, branch) {
-    var location = basePath + filename;
+    var location = basePath + encodeURIComponent(filename);
 
     var devices = vendormodels_reverse[match];
     if (!(devices instanceof Array) || devices.length != 1) {
@@ -363,11 +406,6 @@ var firmwarewizard = function() {
     var device = devices[0];
 
     if (device.model == '--ignore--' || device.revision == '--ignore--') {
-      return;
-    }
-
-    if (enabled_device_categories.indexOf(device.category) == -1) {
-      // the category is not in the list of enabled categories
       return;
     }
 
@@ -446,18 +484,19 @@ var firmwarewizard = function() {
     // collect branch versions
     app.currentVersions[branch] = version;
 
-    if (!(device.vendor in images)) {
-      images[device.vendor] = {};
+    if (!(device.vendor in availableImages)) {
+      availableImages[device.vendor] = {};
     }
 
-    addArray(images[device.vendor], device.model, {
+    addArray(availableImages[device.vendor], device.model, {
       'revision': revision,
       'branch': branch,
       'type': type,
       'version': version,
       'location': location,
       'size': size,
-      'preview': preview+".jpg"
+      'preview': preview+".jpg",
+      'category': device.category
     });
   }
 
@@ -670,7 +709,7 @@ var firmwarewizard = function() {
       var model = modelList[f][MODEL_MODEL];
 
       for(p = 0; p < previews.length; p++) {
-        if (previews[p].getAttribute('data-searchstring') == searchstring) {
+        if (previews[p].getAttribute('data-model') == model) {
           previews[p].style.display = 'inline-block';
           if (modelList.length == 1) {
             setClass(previews[p], 'selected', true);
@@ -832,6 +871,7 @@ var firmwarewizard = function() {
         return branches.indexOf(a.branch) > branches.indexOf(b.branch);
       });
 
+      $('#branchdescs').innerHTML = '';
       $('#branchselect').innerHTML = '';
       $('#branch-experimental-dl').innerHTML = '';
 
@@ -848,6 +888,29 @@ var firmwarewizard = function() {
         a.innerText = rev.branch +
                       (rev.size!==''?' ['+rev.size+']':'') +
                       ' (' +prettyPrintVersion(rev.version)+')';
+
+        if (rev.branch in config.branch_descriptions) {
+          var li = document.createElement('li');
+          var name = document.createElement('span');
+          name.innerText = rev.branch;
+          name.id = 'branchName';
+          var desc = document.createElement('span');
+          desc.id = 'branchDesc'
+          desc.innerText = ' ' + config.branch_descriptions[rev.branch];
+
+          li.appendChild(name);
+
+          if (rev.branch == config.recommended_branch) {
+            var recommended = document.createElement('sup');
+            recommended.innerText = ' Empfehlung';
+            name.appendChild(recommended);
+          }
+
+          br = document.createElement('br');
+          li.appendChild(br);
+          li.appendChild(desc);
+          $('#branchdescs').appendChild(li);
+        }
 
         if (config.experimental_branches.indexOf(rev.branch) != -1) {
           if($('#branchselect .dl-experimental') === null) {
@@ -1024,7 +1087,7 @@ var firmwarewizard = function() {
       do {
         hrefMatch = reLink.exec(data);
         if (hrefMatch) {
-          var href = hrefMatch[1];
+          var href = decodeURIComponent(hrefMatch[1]);
           if (ignoreFileName(href)) {
             continue;
           }

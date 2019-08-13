@@ -21,6 +21,12 @@ var config = {
   // set enabled categories of devices (see devices.js)
   // Show all vendormodels, not only the recommended ones
   enabled_device_categories: Object.keys(vendormodels),
+  // Display a checkbox that allows to display not recommended devices.
+  // This only make sense if enabled_device_categories also contains not
+  // recommended devices.
+  recommended_toggle: false,
+  // Optional link to an info page about no longer recommended devices
+  recommended_info_link: null,
   // community prefix of the firmware images
   community_prefix: 'gluon-ffmr-',
   // firmware version regex
@@ -32,8 +38,17 @@ var config = {
     '/experimental/factory/': 'experimental',
     '/experimental/sysupgrade/': 'experimental'
   },
+  // page title
+  title: 'Firmware',
+  // branch descriptions shown during selection
+  branch_descriptions: {
+    stable: 'Gut getestet, zuverlässig und stabil.',
+    experimental: 'Ungetestet, automatisch generiert.'
+  },
+  // recommended branch will be marked during selection
+  recommended_branch: 'stable',
   // experimental branches (show a warning for these branches)
-  experimental_branches: ['experimental'],
+  experimental_branches: [],
   // path to preview pictures directory
   preview_pictures: 'pictures/',
   // link to changelog
