@@ -120,7 +120,7 @@ var firmwarewizard = function() {
     return index === self.indexOf(e);
   });
 
-  var reFileExtension = new RegExp(/.(bin|img.gz|img|tar|ubi)/);
+  var reFileExtension = new RegExp(/\.(bin|chk|img\.gz|img|tar|ubi)$/);
   var reRemoveDashes = new RegExp(/-/g);
   var reSearchable = new RegExp('[-/ '+NON_BREAKING_SPACE+']', 'g');
   var reRemoveSpaces = new RegExp(/ /g);
@@ -203,7 +203,6 @@ var firmwarewizard = function() {
       images[vendor] = {};
       for (var model in availableImages[vendor]) {
         for (var device in availableImages[vendor][model]) {
-          console.log(availableImages[vendor][model][device].category)
           if (enabled_device_categories.indexOf(availableImages[vendor][model][device].category) > -1) {
             addArray(images[vendor], model, availableImages[vendor][model][device]);
           }
@@ -357,7 +356,6 @@ var firmwarewizard = function() {
   }
 
   function findVersion(name) {
-    // version with optional date in it (e.g. 0.8.0~20160502)
     var m = reVersionRegex.exec(name);
     return m ? m[1] : '';
   }
@@ -528,7 +526,9 @@ var firmwarewizard = function() {
     if (modelList.length == 1) {
       var vendor = modelList[0][MODEL_VENDOR];
       var model = modelList[0][MODEL_MODEL];
+      var revision = modelList[0][MODEL_MATCHED_REVISION];
       return images[vendor][model]
+        .filter(function(value, index, self) { return value['revision'] == revision; })
         .map(function(e) { return e.type; })
         .filter(function(value, index, self) { return self.indexOf(value) === index; })
         .sort();
@@ -1070,6 +1070,9 @@ var firmwarewizard = function() {
     xmlhttp.onreadystatechange = function() {
       if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
         callback(xmlhttp.responseText, url);
+      } else if (xmlhttp.readyState == 4) {
+        console.log("Could not load " + url);
+        callback(null, url);
       }
     };
     xmlhttp.open('GET', url, true);
@@ -1101,8 +1104,8 @@ var firmwarewizard = function() {
       } while (hrefMatch);
 
       // check if we loaded all directories
-      sitesLoadedSuccessfully++;
-      if (sitesLoadedSuccessfully == Object.keys(config.directories).length) {
+      directoryLoadCount++;
+      if (directoryLoadCount == Object.keys(config.directories).length) {
         callback();
       }
     };
@@ -1126,7 +1129,7 @@ var firmwarewizard = function() {
     // - the end of the expression (if the file extension is part of the regex)
     var reMatch = new RegExp('('+matchString+')([.-]|$)');
 
-    var sitesLoadedSuccessfully = 0;
+    var directoryLoadCount = 0;
     for (var indexPath in config.directories) {
       // retrieve the contents of the directory
       loadSite(indexPath, parseSite);

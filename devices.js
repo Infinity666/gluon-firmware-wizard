@@ -4,8 +4,18 @@ var devices_recommended = {
     "Jalapeno Board": "8devices-jalapeno"
   },
 
+  "Aerohive": {
+    "HiveAP 121": "aerohive-hiveap-121",
+    "HiveAP 330": "aerohive-hiveap-330",
+  },
+
   "Allnet": {
     "ALL0315N": "allnet-all0315n"
+  },
+
+  "Aruba": {
+    "AP-303": "aruba-ap-303",
+    "Instant On AP11": "aruba-instant-on-ap11"
   },
 
   "Asus": {
@@ -16,6 +26,15 @@ var devices_recommended = {
   "AVM": {
     "FRITZ!Box 4020": "avm-fritz-box-4020",
     "FRITZ!Box 4040": "avm-fritz-box-4040",
+    "FRITZ!Box 7312": "avm-fritz-box-7312",
+    "FRITZ!Box 7320": "avm-fritz-box-7320",
+    "FRITZ!Box 7330": "avm-fritz-box-7330",
+    "FRITZ!Box 7330 SL": "avm-fritz-box-7330-sl",
+    "FRITZ!Box 7360 SL": "avm-fritz-box-7360-sl",
+    "FRITZ!Box 7360": {"avm-fritz-box-7360-v1": "v1", "avm-fritz-box-7360-v2": "v2"},
+    "FRITZ!Box 7362 SL": "avm-fritz-box-7362-sl",
+    "FRITZ!Box 7412": "avm-fritz-box-7412",
+    "FRITZ!Repeater 1200": "avm-fritz-repeater-1200",
     "FRITZ!WLAN Repeater 300E": "avm-fritz-wlan-repeater-300e",
     "FRITZ!WLAN Repeater 450E": "avm-fritz-wlan-repeater-450e"
   },
@@ -35,6 +54,19 @@ var devices_recommended = {
     "DIR-860L": "d-link-dir-860l"
   },
 
+  "devolo": {
+    "WiFi Pro 1200e": "devolo-wifi-pro-1200e",
+    "WiFi Pro 1200i": "devolo-wifi-pro-1200i",
+    "WiFi Pro 1750c": "devolo-wifi-pro-1750c",
+    "WiFi Pro 1750e": "devolo-wifi-pro-1750e",
+    "WiFi Pro 1750i": "devolo-wifi-pro-1750i",
+    "WiFi Pro 1750x": "devolo-wifi-pro-1750x",
+  },
+
+  "Enterasys": {
+    "WS-AP3710i": "enterasys-ws-ap3710i",
+  },
+
   "GL.iNet": {
     "GL-AR150": {"gl-ar150": "", "gl.inet-gl-ar150": ""},
     "GL-AR300M": {"gl-ar300m": "", "gl.inet-gl-ar300m": ""},
@@ -44,7 +76,8 @@ var devices_recommended = {
     "GL-B1300": "gl.inet-gl-b1300",
     "GL-MT300a": "gl-mt300a",
     "GL-MT300n": {"gl-mt300n": "v1", "gl-mt300n-v2": "v2"},
-    "GL-MT750": "gl-mt750"
+    "GL-MT750": "gl-mt750",
+    "VIXMINI": "gl.inet-vixmini"
   },
 
   "LeMaker": {
@@ -72,12 +105,13 @@ var devices_recommended = {
 
   "Netgear": {
     "EX6100": {"netgear-ex6100v2": "v2"},
-    "EX6150": {"netgear-ex6150v2": "v2"},
+    "EX6150": {"netgear-ex6150": "v1", "netgear-ex6150v2": "v2"},
     "R6120": "netgear-r6120",
+    "R6220": "netgear-r6220",
     "R7800": "netgear-nighthawk-x4s-r7800",
     "WNR2200": "netgear-wnr2200",
     "WNDR3700": {"netgear-wndr3700": "v1", "netgear-wndr3700v2": "v2", "netgear-wndr3700v3": "v3", "netgear-wndr3700v4": "v4", "netgear-wndr3700v5": "v5"},
-    "WNDR3800": "netgear-wndr3800",
+    "WNDR3800": {"netgear-wndr3800": "", "netgear-wndr3800chmychart": "--ignore--"},
     "WNDR4300": "netgear-wndr4300",
     "WNDRMAC": {"netgear-wndrmac": "v1", "netgear-wndrmacv2": "v2"},
   },
@@ -91,6 +125,8 @@ var devices_recommended = {
 
   "OCEDO": {
     "Koala": "ocedo-koala",
+    "Panda": "ocedo-panda",
+    "Raccoon": "ocedo-raccoon",
   },
 
   "Onion": {
@@ -125,15 +161,20 @@ var devices_recommended = {
 
   "TP-Link": {
     "Archer C2600": {"tp-link-archer-c2600": "v1"},
+    "Archer C2": {"tp-link-archer-c2": "v1"},
     "Archer C5": {"tp-link-archer-c5": "v1"},
+    "Archer C6": {"tp-link-archer-c6": "v2"},
     "Archer C7": "tp-link-archer-c7",
-    "Archer C50": {"tp-link-archer-c50-v3": "v3", "tp-link-archer-c50-v4": "v4"},
+    "Archer C20": "tp-link-archer-c20",
+    "Archer C20i": "tp-link-archer-c20i",
+    "Archer C50": {"tp-link-archer-c50": "v1", "tp-link-archer-c50-v3": "v3", "tp-link-archer-c50-v4": "v4"},
     "Archer C59": {"tp-link-archer-c59": "v1"},
     "CPE210": {"tp-link-cpe210": "", "tp-link-cpe210-220": "", "tp-link-cpe220": "--ignore--"},
     "CPE510": {"tp-link-cpe510": "", "tp-link-cpe510-520": "", "tp-link-cpe520": "--ignore--"},
     "WBS210": "tp-link-wbs210",
     "WBS510": "tp-link-wbs510",
     "TL-MR3420": {"tp-link-tl-mr3420-v5": "v5"},
+    "TL-WA801N/ND": {"tp-link-tl-wa801nd-v5": "v5"},
     "TL-WDR3500": "tp-link-tl-wdr3500",
     "TL-WDR3600": "tp-link-tl-wdr3600",
     "TL-WDR4300": "tp-link-tl-wdr4300",
@@ -143,6 +184,7 @@ var devices_recommended = {
     "TL-WR2543N/ND": {"tp-link-tl-wr2543n-nd": ""},
     "TL-WR841N/ND": {"tp-link-tl-wr841n-v13": "v13"},
     "TL-WR842N/ND": {"tp-link-tl-wr842n-nd-v3": "v3"},
+    "TL-WR902AC": {"tp-link-tl-wr902ac-v3": "v3"},
   },
 
   "Ubiquiti": {
@@ -162,6 +204,7 @@ var devices_recommended = {
     "UniFi AP Pro": "ubiquiti-unifi-ap-pro",
     "UniFi AP AC Pro": "ubiquiti-unifi-ac-pro",
     "UniFi AP AC Lite": "ubiquiti-unifi-ac-lite",
+    "UniFi AP AC LR": "ubiquiti-unifi-ac-lite-mesh",
     "UniFi AP Outdoor": {"ubiquiti-unifi-outdoor": "", "ubiquiti-unifiap-outdoor": ""},
     "UniFi AP Outdoor+": {"ubiquiti-unifi-outdoor-plus": "", "ubiquiti-unifiap-outdoor+": "", "ubiquiti-unifiap-outdoor%2B": "", "ubiquiti-unifiap-outdoor%2b": ""}
   },
@@ -206,7 +249,7 @@ var devices_ath10k_lowmem = {
 	"TP-Link": {
 		"Archer C25": {"tp-link-archer-c25": "v1"},
 		"Archer C58": {"tp-link-archer-c58": "v1"},
-		"Archer C60": {"tp-link-archer-c60": "v1"},
+		"Archer C60": {"tp-link-archer-c60-v1": "v1", "tp-link-archer-c60-v2": "v2"},
 		"RE355": "tp-link-re355",
 		"RE450": "tp-link-re450",
 		"TL-WR902AC": {"tp-link-tl-wr902ac-v1": "v1"},
@@ -238,7 +281,10 @@ var devices_4_32 = {
     "TL-WA730RE": "tp-link-tl-wa730re",
     "TL-WA750RE": "tp-link-tl-wa750re",
     "TL-WA7510N": "tp-link-tl-wa7510n",
-    "TL-WA801N/ND": {"tp-link-tl-wa801n": "", "tp-link-tl-wa801n-nd": ""},
+    "TL-WA801N/ND": {"tp-link-tl-wa801n-nd-v1": "v1",
+                     "tp-link-tl-wa801n-nd-v2": "v2",
+                     "tp-link-tl-wa801n-nd-v3": "v3"
+    },
     "TL-WA830RE": "tp-link-tl-wa830re",
     "TL-WA850RE": "tp-link-tl-wa850re",
     "TL-WA860RE": "tp-link-tl-wa860re",

@@ -43,7 +43,7 @@ var config = {
   // branch descriptions shown during selection
   branch_descriptions: {
     stable: 'Gut getestet, zuverlässig und stabil.',
-    experimental: 'Ungetestet, automatisch generiert.'
+    experimental: 'Neue Features, kaum getestet.'
   },
   // recommended branch will be marked during selection
   recommended_branch: 'stable',
@@ -52,6 +52,5 @@ var config = {
   // path to preview pictures directory
   preview_pictures: 'pictures/',
   // link to changelog
-  // I CAN HAS CHANGELOG?
-  changelog: 'https://firmware.marburg.freifunk.net/'
+  changelog: 'https://github.com/hackspace-marburg/ffmr-site/releases'
 };
